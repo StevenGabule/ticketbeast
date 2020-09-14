@@ -12,22 +12,17 @@ class ParticipateInForumTest extends TestCase
 
     public function testUnAuthenticatedUsersMayNotAddReplies()
     {
-        $this->withExceptionHandling();
-        $this->be($user = factory('App\User')->create());
-
-        $thread = factory('App\Thread')->create();
-
-        $reply = factory('App\Reply')->make();
-        $this->post('/threads/' .$thread->id. '/replies', $reply->toArray());
-        $this->get($thread->path())->assertSee($reply->body);
+        $this->withExceptionHandling()
+            ->post('/threads/some-channel/1/replies',[])
+            ->assertRedirect('/login');
     }
 
     public function testAnAuthenticatedUserMayParticipateInForumThreads()
     {
-        $this->be($user = factory(User::class)->create());
-        $thread = factory(Thread::class)->create();
-        $reply = factory(Reply::class)->make();
-        $this->post('/threads/' . $thread->id . '/replies', $reply->toArray());
-        $this->get('/threads/' . $thread->id)->assertSee($reply->body);
+        $this->signIn();
+        $thread = create(Thread::class);
+        $reply = make(Reply::class);
+        $this->post($thread->path() . '/replies', $reply->toArray());
+        $this->get($thread->path())->assertSee($reply->body);
     }
 }
