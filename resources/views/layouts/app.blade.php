@@ -34,7 +34,10 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('thread.index') }}">{{ __('Threads') }}</a>
+                            <a class="nav-link" href="{{ route('threads.index') }}">{{ __('Threads') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('threads.create') }}">{{ __('Create') }}</a>
                         </li>
                     </ul>
 
