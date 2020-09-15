@@ -45,7 +45,7 @@ class ThreadsController extends Controller
             'title' => $request->title,
             'body' => $request->body,
         ]);
-        return redirect($thread->path());
+        return redirect($thread->path() );
     }
 
 
@@ -53,7 +53,7 @@ class ThreadsController extends Controller
     {
         return view('threads.show', [
             'thread' => $thread,
-            'replies' => $thread->replies()->paginate(2)
+            'replies' => $thread->replies()->paginate(7)
         ]);
     }
 
