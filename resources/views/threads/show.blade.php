@@ -34,7 +34,7 @@
         </div>
 
         @if(auth()->check())
-            <div class="row justify-content-center mt-3 mb-lg-5">
+            <div class="row mt-3 mb-lg-5">
                 <div class="col-md-8">
                     <form action="{{ $thread->path() . '/replies' }}" method="post">
                         @csrf
