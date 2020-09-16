@@ -5,6 +5,8 @@
       <w>favorited</w>
       <w>navbar</w>
       <w>pgsql</w>
+      <w>sqlsrv</w>
+      <w>sslmode</w>
       <w>toggler</w>
     </words>
   </dictionary>

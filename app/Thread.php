@@ -2,10 +2,13 @@
 
 namespace App;
 
+use App\Traits\RecordsActivity;
 use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
 {
+    use RecordsActivity;
+
     protected $guarded = [];
 
     protected $with = ['creator'];
@@ -13,14 +16,16 @@ class Thread extends Model
     protected static function boot()
     {
         parent::boot();
-        static::addGlobalScope('replyCount', function($builder) {
-           $builder->withCount('replies');
+        static::addGlobalScope('replyCount', function ($builder) {
+            $builder->withCount('replies');
         });
 
-        static::deleting(function($thread) {
+        static::deleting(function ($thread) {
             $thread->replies()->delete();
         });
+
     }
+
 
     public function replies()
     {

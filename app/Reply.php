@@ -3,11 +3,12 @@
 namespace App;
 
 use App\traits\Favoritable;
+use App\traits\RecordsActivity;
 use Illuminate\Database\Eloquent\Model;
 
 class Reply extends Model
 {
-    use Favoritable;
+    use Favoritable, RecordsActivity;
     protected $guarded = [];
 
     protected $with = ['owner', 'favorites'];
