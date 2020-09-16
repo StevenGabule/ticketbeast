@@ -2,13 +2,11 @@
 
 @section('content')
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">{{ __('Forum Threads') }}</div>
-
-                    <div class="card-body">
-                        @foreach($threads as $thread)
+        <div class="row">
+            <div class="col-md-12 col-lg-12">
+                @forelse($threads as $thread)
+                    <div class="card mt-3">
+                        <div class="card-body">
                             <article>
                                 <div class="level">
                                     <h4 class="flex">
@@ -20,10 +18,11 @@
                                     {{$thread->body}}
                                 </div>
                             </article>
-                            <hr />
-                        @endforeach
-                    </div>
-                </div>
+                        </div><!-- end of card body -->
+                    </div><!-- end of card -->
+                @empty
+                    <p>There are no relevant results at this time.</p>
+                @endforelse
             </div>
         </div>
     </div>
