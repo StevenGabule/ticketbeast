@@ -20,3 +20,5 @@ Route::get('/profiles/{user}', 'ProfileController@show')->name('profile');
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::delete('/replies/{reply}', 'RepliesController@destroy');
+Route::patch('/replies/{reply}', 'RepliesController@update');
+
