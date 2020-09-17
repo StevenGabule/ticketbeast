@@ -9,9 +9,12 @@ use Illuminate\Database\Eloquent\Model;
 class Reply extends Model
 {
     use Favoritable, RecordsActivity;
+
     protected $guarded = [];
 
     protected $with = ['owner', 'favorites'];
+
+    protected $appends = ['favoritesCount', 'isFavorited'];
 
     public function owner()
     {
@@ -27,5 +30,7 @@ class Reply extends Model
     {
         return $this->thread->path() . "#reply-{$this->id}";
     }
+
+
 
 }

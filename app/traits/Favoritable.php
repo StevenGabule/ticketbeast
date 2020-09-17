@@ -5,7 +5,6 @@ namespace App\traits;
 
 
 use App\Favorite;
-use App\Reply;
 
 trait Favoritable
 {
@@ -13,6 +12,11 @@ trait Favoritable
     public function isFavorited()
     {
         return !!$this->favorites->where('user_id', auth()->id())->count();
+    }
+
+    public function getIsFavoritedAttribute()
+    {
+        return $this->isFavorited();
     }
 
     public function getFavoritesCountAttribute()
@@ -31,5 +35,11 @@ trait Favoritable
         if (!$this->favorites()->where($attributes)->exists()) {
             $this->favorites()->create(($attributes));
         }
+    }
+
+    public function unfavorite()
+    {
+        $attributes = ['user_id' => auth()->id()];
+        $this->favorites()->where($attributes)->delete();
     }
 }
