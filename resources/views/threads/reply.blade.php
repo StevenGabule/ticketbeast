@@ -29,11 +29,12 @@
             <div class="card-footer">
                 <div class="d-flex">
                     <button class="btn-info btn btn-sm" @click="editing = true">Edit</button>
-                    <form action="/replies/{{$reply->id}}" method="post" class="ml-2">
+                    <button class="btn btn-sm btn-danger ml-2" @click="destroy">Delete</button>
+                    {{--<form action="/replies/{{$reply->id}}" method="post" class="ml-2">
                         @csrf
                         @method('DELETE')
                         <button class="btn btn-sm btn-danger" type="submit">Delete</button>
-                    </form>
+                    </form>--}}
                 </div>
             </div>
         @endcan

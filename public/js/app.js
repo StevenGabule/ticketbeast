@@ -1973,6 +1973,12 @@ __webpack_require__.r(__webpack_exports__);
       });
       this.editing = false;
       flash('Updated reply!');
+    },
+    destroy: function destroy() {
+      axios["delete"]("/replies/".concat(this.attributes.id));
+      $(this.$el).fadeOut(300, function () {
+        return flash('Your reply has been deleted.');
+      });
     }
   }
 });
