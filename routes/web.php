@@ -18,6 +18,5 @@ Route::post('/replies/{reply}/favorites', 'FavoritesController@store');
 
 Route::get('/profiles/{user}', 'ProfileController@show')->name('profile');
 
-Auth::routes();
-
 Route::get('/home', 'HomeController@index')->name('home');
+Route::delete('/replies/{reply}', 'RepliesController@destroy');
