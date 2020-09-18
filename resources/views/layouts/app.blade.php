@@ -18,13 +18,25 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <script>
+        window.App = {!!json_encode([
+          'user' => Auth::user(),
+          'signedIn' => Auth::check(),
+      ]) !!};
+    </script>
     <style>
         .level {
             display: flex;
             align-items: center;
         }
-        .flex { flex: 1}
-        [v-cloak] { display: none}
+
+        .flex {
+            flex: 1
+        }
+
+        [v-cloak] {
+            display: none
+        }
     </style>
 </head>
 <body>
