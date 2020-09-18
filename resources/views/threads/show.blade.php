@@ -27,7 +27,9 @@
                         </div>
                     </div><!-- end of card -->
 
-                    <replies :data="{{ $thread->replies }}" @removed="repliesCount--"></replies>
+                    <replies :data="{{ $thread->replies }}"
+                             @added="repliesCount++"
+                             @removed="repliesCount--"></replies>
 
                     {{ $replies->links() }}
 
@@ -46,23 +48,7 @@
                 </div>
             </div>
 
-            @if(auth()->check())
-                <div class="row mt-3 mb-lg-5">
-                    <div class="col-md-8">
-                        <form action="{{ $thread->path() . '/replies' }}" method="post">
-                            @csrf
-                            <div class="form-group">
-                                <textarea name="body" id="body" class="form-control" placeholder="Leave a comment"
-                                      rows="5"></textarea>
-                            </div>
-                            <button class="btn btn-success btn-sm" type="submit">Submit</button>
-                        </form>
-                    </div>
-                </div>
-            @else
-                <p class="lead text-center">Please <a href="{{ route('login') }}">sign in</a> to participate in this
-                    discussion. </p>
-            @endif
+
         </div>
     </thread-view>
 

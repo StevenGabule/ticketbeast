@@ -7,6 +7,7 @@ use App\Thread;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
@@ -24,7 +25,7 @@ class RepliesController extends Controller
     /**
      * @param $channelId
      * @param Thread $thread
-     * @return RedirectResponse
+     * @return Model|RedirectResponse
      * @throws ValidationException
      */
     public function store($channelId, Thread $thread)
@@ -33,10 +34,14 @@ class RepliesController extends Controller
             'body' => 'required'
         ]);
 
-        $thread->addReply([
+        $reply = $thread->addReply([
             'body' => request('body'),
             'user_id' => auth()->id(),
         ]);
+
+        if (request()->expectsJson()) {
+            return $reply->load('owner');
+        }
 
         return back()->with('flash', 'Your reply has been left.');
     }
