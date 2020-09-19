@@ -6,7 +6,15 @@ use App\Channel;
 use App\Filters\ThreadFilters;
 use App\Thread;
 use App\User;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
+use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
 
 class ThreadsController extends Controller
 {
@@ -15,13 +23,13 @@ class ThreadsController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth')->except(['index','show']);
+        $this->middleware('auth')->except(['index', 'show']);
     }
 
     /**
      * @param Channel $channel
      * @param ThreadFilters $filters
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
+     * @return Application|Factory|View|mixed
      */
     public function index(Channel $channel, ThreadFilters $filters)
     {
@@ -35,7 +43,7 @@ class ThreadsController extends Controller
     }
 
     /**
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Application|Factory|View
      */
     public function create()
     {
@@ -44,8 +52,8 @@ class ThreadsController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     * @throws \Illuminate\Validation\ValidationException
+     * @return Application|RedirectResponse|Redirector
+     * @throws ValidationException
      */
     public function store(Request $request)
     {
@@ -55,7 +63,7 @@ class ThreadsController extends Controller
             'channel_id' => 'required|exists:channels,id',
         ]);
 
-        $thread= Thread::create([
+        $thread = Thread::create([
             'user_id' => auth()->id(),
             'channel_id' => $request->channel_id,
             'title' => $request->title,
@@ -64,18 +72,14 @@ class ThreadsController extends Controller
         return redirect($thread->path())->with('flash', 'Your thread has been published');
     }
 
-
     /**
      * @param $channelId
      * @param Thread $thread
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Application|Factory|View
      */
     public function show($channelId, Thread $thread)
     {
-        return view('threads.show', [
-            'thread' => $thread,
-            'replies' => $thread->replies()->paginate(7)
-        ]);
+        return view('threads.show',compact('thread'));
     }
 
     /**
@@ -98,12 +102,12 @@ class ThreadsController extends Controller
     /**
      * @param $channel
      * @param Thread $thread
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @return Application|ResponseFactory|Response
      * @throws \Exception
      */
     public function destroy($channel, Thread $thread)
     {
-       $this->authorize('update', $thread);
+        $this->authorize('update', $thread);
         $thread->delete();
         if (request()->wantsJson()) {
             return response([], 204);
@@ -125,7 +129,6 @@ class ThreadsController extends Controller
         }
         return $threads->get();
     }
-
 
 
 }

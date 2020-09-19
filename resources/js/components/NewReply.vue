@@ -21,12 +21,10 @@
 
 <script>
     export default {
-        props: ['endpoint'],
         name: "NewReply",
         data() {
             return {
                 body: '',
-                endpoint: this.endpoint
             }
         },
 
@@ -38,7 +36,7 @@
 
         methods: {
             addReply() {
-                axios.post(this.endpoint, {body: this.body})
+                axios.post(`${location.pathname}/replies`, {body: this.body})
                     .then(({data}) => {
                         this.body = '';
                         flash("Your reply has been posted.")

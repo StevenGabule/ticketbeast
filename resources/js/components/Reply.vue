@@ -5,7 +5,7 @@
             <div class="level">
                 <h5 class="flex">
                     <a :href="'/profiles/'+data.owner.name" v-text="data.owner.name"></a>
-                    said {{ data.created_at }}
+                    said <span v-text="ago"></span>
                 </h5>
                 <div v-if="signedIn">
                     <favorite :reply="data"></favorite>
@@ -37,6 +37,7 @@
 
 <script>
     import Favorite from "./Favorite";
+    import moment from 'moment'
 
     export default {
         name: "Reply",
@@ -54,9 +55,14 @@
             signedIn() {
                 return window.App.signedIn;
             },
+
             canUpdate() {
-               return this.authorize(user => this.data.user_id === user.id);
+                return this.authorize(user => this.data.user_id === user.id);
                 // return this.data.user_id === window.App.user.id;
+            },
+
+            ago() {
+                return moment(this.data.created_at).fromNow()
             },
         },
 
