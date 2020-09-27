@@ -20,12 +20,14 @@ class ThreadTest extends TestCase
         $this->thread = factory('App\Thread')->create();
     }
 
-    function testAThreadCanMakeAStringPath() {
+    function testAThreadCanMakeAStringPath()
+    {
         $thread = create('App\Thread');
         $this->assertEquals("/threads/{$thread->channel->slug}/{$thread->id}", $thread->path());
     }
 
-    function testAThreadHasACreator() {
+    function testAThreadHasACreator()
+    {
         $this->assertInstanceOf(User::class, $this->thread->creator);
     }
 
@@ -52,8 +54,18 @@ class ThreadTest extends TestCase
     public function test_a_thread_can_be_subscribed_to()
     {
         $thread = create(Thread::class);
-        $this->signIn();
-        $thread->subscribe();
-        $thread->subscriptions()->where('user_id', auth()->id())->get();
+        $thread->subscribe($userId = 1);
+        $this->assertEquals(
+            1,
+            $thread->subscriptions()->where('user_id', $userId)->count()
+        );
+    }
+
+    public function test_a_thread_can_be_unsubscribed_from()
+    {
+        $thread = create(Thread::class);
+        $thread->subscribe($userId = 1);
+        $thread->unsubscribe($userId);
+        $this->assertCount(0, $thread->subscriptions);
     }
 }
