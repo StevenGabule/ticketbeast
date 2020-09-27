@@ -12,7 +12,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        User::create([
+        /*User::create([
             'name' => 'John Paul L. Gabule',
             'email' => 'johnpaulgabule@gmail.com',
             'password' => \Illuminate\Support\Facades\Hash::make('password')
@@ -21,6 +21,6 @@ class DatabaseSeeder extends Seeder
         $threads  = factory(\App\Thread::class, 50)->create();
         $threads->each(function($thread) {
            factory(\App\Reply::class, 10)->create(['thread_id' => $thread->id]);
-        });
+        });*/
     }
 }

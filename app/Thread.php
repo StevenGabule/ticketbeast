@@ -4,6 +4,7 @@ namespace App;
 
 use App\Traits\RecordsActivity;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Thread extends Model
 {
@@ -16,9 +17,6 @@ class Thread extends Model
     protected static function boot()
     {
         parent::boot();
-        static::addGlobalScope('replyCount', function ($builder) {
-            $builder->withCount('replies');
-        });
 
         static::deleting(function ($thread) {
             $thread->replies->each->delete();;
@@ -42,11 +40,18 @@ class Thread extends Model
         return "/threads/{$this->channel->slug}/{$this->id}";
     }
 
+    /**
+     * @param $reply
+     * @return Model
+     */
     public function addReply($reply)
     {
         return $this->replies()->create($reply);
     }
 
+    /**
+     * @return BelongsTo
+     */
     public function channel()
     {
         return $this->belongsTo(Channel::class);
@@ -55,5 +60,15 @@ class Thread extends Model
     public function scopeFilter($query, $filters)
     {
         return $filters->apply($query);
+    }
+
+    public function subscribe()
+    {
+
+    }
+
+    public function subscriptions()
+    {
+//        $this->hasMany(ThreadSubscription::class);
     }
 }
