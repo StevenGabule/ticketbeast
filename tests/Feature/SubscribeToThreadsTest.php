@@ -4,7 +4,7 @@
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
- class SubscribeToThreadsTest extends TestCase
+class SubscribeToThreadsTest extends TestCase
 {
     use DatabaseMigrations;
 
@@ -18,6 +18,16 @@ use Tests\TestCase;
             'user_id' => auth()->id(),
             'body' => 'some reply here'
         ]);
-        
     }
+    /** @test */
+    public function a_user_can_subscribe_from_threads()
+    {
+        $this->signIn();
+        $thread = create(\App\Thread::class);
+        $thread->subscribe();
+        $this->delete($thread->path() . '/subscriptions');
+        $this->assertCount(0, $thread->subscriptions);
+    }
+
+
 }

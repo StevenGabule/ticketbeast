@@ -4,26 +4,29 @@ namespace App\traits;
 
 use App\Activity;
 
-trait RecordsActivity {
+trait RecordsActivity
+{
+    protected static function bootRecordsActivity()
+    {
+        if (auth()->guest()) {
+            return;
+        }
 
-   protected static function bootRecordsActivity() {
-       if (auth()->guest()) return;
+        foreach (static::getActivitiesToRecord() as $event) {
+            static::$event(function ($model) use ($event) {
+                $model->recordActivity($event);
+            });
+        }
 
-       foreach(static::getActivitiesToRecord() as $event) {
-           static::$event(function ($model) use ($event) {
-               $model->recordActivity($event);
-           });
-       }
-
-       static::deleting(function($model) {
-          $model->activity()->delete();
-       });
-   }
+        static::deleting(function ($model) {
+            $model->activity()->delete();
+        });
+    }
 
     protected static function getActivitiesToRecord()
     {
         return ['created'];
-   }
+    }
 
     protected function recordActivity($event)
     {
@@ -43,5 +46,4 @@ trait RecordsActivity {
         $type = strtolower((new \ReflectionClass($this))->getShortName());
         return  "{$event}_{$type}";
     }
-
 }

@@ -14,16 +14,17 @@ class Thread extends Model
 
     protected $with = ['creator'];
 
+    protected $appends = ['isSubscribedTo'];
+
     protected static function boot()
     {
         parent::boot();
 
         static::deleting(function ($thread) {
-            $thread->replies->each->delete();;
+            $thread->replies->each->delete();
+            ;
         });
-
     }
-
 
     public function replies()
     {
@@ -71,11 +72,18 @@ class Thread extends Model
 
     public function unsubscribe($userId = null)
     {
-        $this->subscriptions()->where('user_id',$userId ?: auth()->id())->delete();
+        $this->subscriptions()->where('user_id', $userId ?: auth()->id())->delete();
     }
 
     public function subscriptions()
     {
         return $this->hasMany(ThreadSubscription::class);
+    }
+
+    public function getIsSubscribedToAttribute()
+    {
+        return $this->subscriptions()
+            ->where('user_id', auth()->id())
+            ->exists();
     }
 }
